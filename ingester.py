@@ -1,19 +1,18 @@
 """
 Push new data to sqlite database.
 """
-import dateutil.parser
 import datetime
 
 from peewee import *
 
-from models import File, Contribution
-
 from app import db
+
+from models import File, Contribution
 
 def parse_fec_file(infile):
     with open(infile) as f:
         res = [parse_line(line) for line in f]
-        return [line_to_dict(val) for val in res]
+        return [row_to_dict(val) for val in res]
 
 def parse_line(l):
     vals = l.split('|')
@@ -69,36 +68,20 @@ def ingested(filepath):
         return False
 
 def ingest(filepath):
-    '''Ingest file into database'''
+    '''Ingest file into sqlite database'''
 
     print "Ingesting %s" % filepath
-    rows_in_file = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath)
+    rows = parse_fec_file(filepath)
+    myfile = File.get_or_create(name=filepath)[0]
     myfile_id = myfile.id
 
-    with db.transaction(): # TODO: More sane error handling
-        for idx in range(0, len(rows_in_file), 500):
-
-            # Ingest 500 rows at a time
-            print "Inserting row %d of %s" % (idx, filepath)
-            rows_subset = rows_in_file[idx:idx+500]
-            rows_to_insert = []
-
-            for row in rows_subset:
-                unsaved_new_contribution = Contribution(**row_to_dict(row))
-                import pdb; pdb.set_trace()
-                # If the row isn't already there, insert it
-                if :
-                    pass
-                # If the row is there, check for modifications
-                elif:
-                    # If it has not been modified, simply add a ContributionHistory object
-                    if:
-                    # If it has been modified, create a new object and give the new object a contribution history
-                    else:
-                        pass
-
-            Contribution.insert_many(rows_subset).execute()
+    for idx in range(0, len(rows), 500):
+        print "Inserting row %d of %s" % (idx, filepath)
+        rows_subset = rows[idx:idx+500]
+        for row in rows_subset:
+            row['file'] = myfile_id
+            row['sub_id'] = str(row['sub_id'])
+        Contribution.insert_many(rows_subset).execute()
 
 if __name__ == '__main__':
     filepaths = [
