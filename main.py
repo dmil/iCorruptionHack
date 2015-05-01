@@ -21,9 +21,8 @@ def clear_db():
     print "Cleared database"
 
 def seed_db():
-    # with open("data/FEC 2014 9.14.2014/itcont.txt") as initialfile:
-    #     ingest(initialfile)
-    ingest("data/FEC 2014 9.14.2014/itcont.txt")
+    ingest("data/2013_2014/downloaded_2015_04_05/itcont.txt")
+
 def reset_database():
     # Drop all tables in postgres database
     clear_db()
