@@ -4,7 +4,7 @@ import json
 from peewee import *
 
 from app import app, db
-from models import File, Contribution, ContributionChanges, ContributionHistory
+from models import File, Contribution, ContributionChanges, ContributionHistory, CampaignAndComitteeSummary
 from ingester import seed_from, ingest
 
 def createtables_db():
