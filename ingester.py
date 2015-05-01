@@ -90,18 +90,17 @@ def ingest(filepath):
         for idx, row in enumerate(rows):
             print "Inserting row %d of %s" % (idx, filepath)
 
-            for row in rows_subset:
-                # If the row isn't already there, insert it
-                if :
-                    rows_to_insert.append(row)
+            # If the row isn't already there, insert it
+            if :
+                rows_to_insert.append(row)
+                pass
+            # If the row is there, check for modifications
+            elif:
+                # If it has not been modified, simply add a ContributionHistory object
+                if:
+                # If it has been modified, create a new object and give the new object a contribution history
+                else:
                     pass
-                # If the row is there, check for modifications
-                elif:
-                    # If it has not been modified, simply add a ContributionHistory object
-                    if:
-                    # If it has been modified, create a new object and give the new object a contribution history
-                    else:
-                        pass
 
             Contribution.insert_many(rows_subset).execute()
 
