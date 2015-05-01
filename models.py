@@ -11,10 +11,10 @@ class BaseModel(Model):
 
 class File(BaseModel):
     id = PrimaryKeyField()
-    name = CharField(null=True, default=None)
-    cycle = IntegerField(null=True, default=None)
-    sha1 = CharField(null=True, default=None)
-    updated = DateTimeField(null=True, default=None)
+    name = CharField(null=False)
+    years = CharField(null=False)
+    sha1 = CharField(null=False)
+    updated = DateTimeField(null=False)
 
     def __str__(self):
         return self.name
