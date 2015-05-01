@@ -19,7 +19,10 @@ class File(BaseModel):
         return self.name
 
 class ContributionBaseModel(BaseModel):
+    sub_id = BigIntegerField(null=False)
     cycle = CharField(null=False)
+    date = DateField(null=False)
+
     comittee_id = CharField(null=True, default=None)
     ammendment_id = CharField(null=True, default=None)
     report_type = CharField(null=True, default=None)
@@ -41,24 +44,26 @@ class ContributionBaseModel(BaseModel):
     memo_cd = CharField(null=True, default=None)
     memo_text = CharField(null=True, default=None)
 
-# Most Recent Contributions
-class Contribution(BaseModel, ContributionBaseModel):
-    sub_id = CharField(null=False)
+    def changes(self):
+        pass
 
+    def history(self):
+        pass
+
+# Most Recent Contributions
+class Contribution(ContributionBaseModel):
     class Meta:
         primary_key = CompositeKey('cycle', 'sub_id')
 
 # ContributionChanges
-class ContributionChanges(BaseModel, ContributionBaseModel):
-    sub_id = ForeignKeyField(Contribution, related_name='changes')
-    date = DateField(null=False)
-
+class ContributionChanges(ContributionBaseModel):
     class Meta:
         primary_key = CompositeKey('date', 'cycle', 'sub_id')
 
 # ContributionHistory
 class ContributionHistory(BaseModel):
-    sub_id = ForeignKeyField(Contribution, related_name='history')
+    sub_id = BigIntegerField(null=False)
+    cycle = CharField(null=False)
     date = DateField(null=False)
 
     class Meta:

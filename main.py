@@ -4,13 +4,13 @@ import json
 from peewee import *
 
 from app import app, db
-from models import File, Contribution
-from ingester import ingest
+from models import File, Contribution, ContributionChanges, ContributionHistory
+from ingester import seed_from, ingest
 
 def createtables_db():
     # Connect to our database.
     db.connect()
-    
+
     # Create the tables.
     db.create_tables([Contribution, ContributionChanges, ContributionHistory, File])
 
@@ -21,7 +21,7 @@ def clear_db():
     print "Cleared database"
 
 def seed_db():
-    ingest("data/2013_2014/downloaded_2015_04_05/itcont.txt")
+    seed_from("data/2013_2014/downloaded_2015_04_05/itcont.txt")
 
 def reset_database():
     # Drop all tables in postgres database
@@ -39,3 +39,6 @@ if __name__ == '__main__':
         app.run()
     elif mode == 'reset':
         reset_database()
+    elif mode == 'ingest':
+        ingest("data/2013_2014/downloaded_2015_04_05/itcont.txt")
+
