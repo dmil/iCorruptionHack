@@ -21,7 +21,7 @@ createdb campaigncon
 python main.py reset
 ```
 
-# Ingesting New Data
+# Download New Data
 
 1. Download data
 ```
