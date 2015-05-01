@@ -12,7 +12,8 @@ class BaseModel(Model):
 class File(BaseModel):
     id = PrimaryKeyField()
     name = CharField(null=True, default=None)
-    year = IntegerField(null=True, default=None)
+    cycle = IntegerField(null=True, default=None)
+    sha1 = CharField(null=True, default=None)
     updated = DateTimeField(null=True, default=None)
 
     def __str__(self):

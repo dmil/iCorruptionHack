@@ -2,6 +2,7 @@
 Push new data to sqlite database.
 """
 import datetime, os, re
+import hashlib
 
 from peewee import *
 
@@ -12,6 +13,10 @@ from models import File, Contribution, ContributionChanges, ContributionHistory
 from flask_peewee.utils import get_dictionary_from_model
 
 from dateutil.parser import parse as dateparse
+
+def sha1OfFile(filepath):
+    with open(filepath, 'rb') as f:
+        return hashlib.sha1(f.read()).hexdigest()
 
 def parse_fec_file(infile):
     cycle = re.match(r"^.*(\d{4}_\d{4}).\w{3}$", infile.split("/")[-1], re.I).groups()[0].replace("_", "-")
@@ -83,7 +88,8 @@ def seed_from(filepath):
 
     print "Ingesting %s" % filepath
     rows = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath)
+    myfile = File.get_or_create(name=filepath,
+                                sha1=sha1OfFile(filepath))
 
     for idx in range(0, len(rows), 500):
         print "Inserting row %d of %s" % (idx, filepath)
