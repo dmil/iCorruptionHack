@@ -1,7 +1,7 @@
 """
 Push new data to sqlite database.
 """
-import datetime
+import datetime, os, re
 
 from peewee import *
 
@@ -11,10 +11,14 @@ from models import File, Contribution, ContributionChanges, ContributionHistory
 
 from flask_peewee.utils import get_dictionary_from_model
 
+from dateutil.parser import parse as dateparse
+
 def parse_fec_file(infile):
+    cycle = re.match(r"^.*(\d{4}_\d{4}).\w{3}$", infile.split("/")[-1], re.I).groups()[0].replace("_", "-")
+    date = dateparse(os.path.dirname(infile).split("/")[-1].replace("downloaded_", "").replace("_", "-")).date()
     with open(infile) as f:
         res = [parse_line(line) for line in f]
-        return [row_to_dict(val) for val in res]
+        return [row_to_dict(val, cycle, date) for val in res]
 
 def parse_line(l):
     vals = l.split('|')
@@ -34,10 +38,10 @@ def parse_line(l):
             vals[i] = datetime.datetime(month=int(vl[0:2]), day=int(vl[2:4]), year=int(vl[4:8]))
     return vals
 
-def row_to_dict(row):
+def row_to_dict(row, cycle, date):
     return {
-        "cycle": "2013-2014",
-        "date": datetime.datetime.now().date(),
+        "cycle": cycle,
+        "date": date,
         "comittee_id" : unicode(row[0]) if row[0] else None,
         "ammendment_id" : unicode(row[1]) if row[1] else None,
         "report_type" : unicode(row[2]) if row[2] else None,
@@ -92,12 +96,14 @@ def ingest(filepath):
     rows = parse_fec_file(filepath)
     myfile = File.get_or_create(name=filepath)
 
+    # check history table to see if this file is done
+
     with db.transaction():
         for idx, row in enumerate(rows):
             print "Checking row %d of %s" % (idx, filepath)
 
             try:
-                contribution_in_db = Contribution.get(cycle="2013-2014", sub_id=row['sub_id'])
+                contribution_in_db = Contribution.get(cycle=row['cycle'], sub_id=row['sub_id'])
             except Contribution.DoesNotExist:
                 contribution_in_db = None
 
@@ -105,32 +111,31 @@ def ingest(filepath):
             if not contribution_in_db:
                 print "\tInserting new row %d of %s" % (idx, filepath)
                 Contribution.create(**row)
-                ContributionHistory.create(date=datetime.datetime.now().date(), cycle="2013-2014", sub_id=row['sub_id'])
+                ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
 
             # If the row is there, check for modifications
             else:
                 # If it has not been modified, simply add a ContributionHistory object
                 contribution_in_db_dict = get_dictionary_from_model(contribution_in_db)
 
-                if contribution_in_db_dict == row:
+                if {k:v for k,v in contribution_in_db_dict.iteritems() if k != "date"} == {k:v for k,v in row.iteritems() if k != "date"}:
                     print "\tNo changes found in row %d of %s" % (idx, filepath)
-                    ContributionHistory.create(date=datetime.datetime.now().date(), cycle="2013-2014", sub_id=row['sub_id'])
+                    ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
                 # If it has been modified, create a new object and give the new object a contribution history
                 else:
                     print "\tDetected change in row %d of %s" % (idx, filepath)
-                    import pdb; pdb.set_trace()
                     ContributionChanges.create(**contribution_in_db_dict)
                     Contribution.update(**row)
-                    ContributionHistory.create(date=datetime.datetime.now().date(), cycle="2013-2014", sub_id=row['sub_id'])
+                    ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
 
-if __name__ == '__main__':
-    filepaths = [
-        "data/FEC 2014 2.17.2014/itcont.txt",
-        "data/FEC 2014 3.22.2015/itcont.txt",
-        "data/FEC 2014 9.14.2014/itcont.txt"
-    ]
+# if __name__ == '__main__':
+#     filepaths = [
+#         "data/FEC 2014 2.17.2014/itcont.txt",
+#         "data/FEC 2014 3.22.2015/itcont.txt",
+#         "data/FEC 2014 9.14.2014/itcont.txt"
+#     ]
 
-    for filepath in filepaths:
-        if not ingested(filepath):
-            ingest(filepath)
+#     for filepath in filepaths:
+#         if not ingested(filepath):
+#             ingest(filepath)
 
