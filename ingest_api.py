@@ -11,11 +11,9 @@ from flask_peewee.utils import get_dictionary_from_model
 
 from dateutil.parser import parse as dateparse
 
-# import the demo key from env vars
-import os
+from keys.json import demo_key
 
 
-DEMO_KEY=os.environ['API_KEY']
 API_URL='http://api.open.fec.gov/v1'
 
 # important fields
@@ -31,7 +29,7 @@ name_converter = {
 
 def check_report_data(test_committees):
     query_params = {
-            'api_key': DEMO_KEY,
+            'api_key': demo_key,
     }
 
     records = []
