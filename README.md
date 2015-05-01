@@ -14,12 +14,10 @@ http://goo.gl/qjbWDO
 # Getting Started
 
 1. Create new database
+2. Edit `keys.example.json` to include database parameters and rename it to `keys.json`
 ```
 createdb campaigncon
 ```
-
-2. Edit `keys.example.json` to include database parameters and rename it to `keys.json`
-
 3. Seed the database
 ```
 python main.py reset
@@ -31,6 +29,7 @@ python main.py reset
 ```
 # Download the data only if there is a new version on the FEC website
 python download.py
+
 # Ingest into database
 python main.py ingest
 ```
