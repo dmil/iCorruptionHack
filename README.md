@@ -1,5 +1,5 @@
 # Summary
-Campaign finance data is an important part of keeping our democracy accountable. This project aims on checking the integrity of that data. "OFEC check" oattacks this problem in two ways. It keeps track of FEC data over time and it tests the soon to be released FEC API against the bulk data. 
+Campaign finance data is an important part of keeping our democracy accountable. This project aims on checking the integrity of that data. "OFEC check" attacks this problem in two ways. It keeps track of FEC data over time and it tests the soon to be released FEC API against the bulk data. 
 
 Tracing the data overtime can surface possible data issues and keep track of how data is amended over time. Testing the new API against the current, canonical data will identify potential data quality issues in the new data infrastructure that can then be fixed before release. 
 
