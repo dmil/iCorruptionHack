@@ -1,5 +1,5 @@
 """
-Push new data to sqlite database.
+Push new data to database.
 """
 import datetime, os, re
 import hashlib

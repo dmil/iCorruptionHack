@@ -1,5 +1,5 @@
 """
-Analyze data in SQLite database
+Analyze data in database
 """
 
 import dateutil.parser
@@ -10,4 +10,4 @@ from peewee import *
 from models.Contribution import Contribution
 from models.File import File
 
-db = SqliteDatabase('contributions.db')
+from app import db
