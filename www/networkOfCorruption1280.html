@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html><head><meta http-equiv="content-type" content="text/html; charset=UTF8">
     <title>campaignCON | Network of Corruption</title>
@@ -9,52 +10,64 @@
             font-family: verdana;
         }
         #mynetwork {
-            width: 1280px;
-            height: 720px;
+            width: 920px;
+            height: 730px;
             border: 1px solid lightgray;
         }
+
         #visualization {
-            width: 1280px;
-            height: 200px;
+            width: 1260px;
+            height: 170px;
             padding: 5px;
             overflow: hidden;
         }
+
         div.nodeContent {
             position: relative;
             border: 1px solid lightgray;
-            width:360px;
-            height:710px;
-            margin-top: -722px;
-            margin-left: 1290px;
+            width:310px;
+            height:720px;
+            margin-top: -732px;
+            margin-left: 930px;
             padding:5px;
             overflow: scroll;
         }
+
         pre {padding: 2px; margin: 2px; }
         .string { color: green; }
         .number { color: darkorange; }
         .boolean { color: blue; }
         .null { color: magenta; }
         .key { color: red; }
+
         #yearDisplay {
             text-align: center;
             font-family: verdana;
-            font-size: 400%;
-            margin-left: 500px;
+            font-size: 250%;
+            margin-left: 400px;
             
         }
+
         #displayGroup{
             position: relative;
         }
+
         div {font-family: verdana;}
+
         h4{font-family: verdana;}
+
         p{font-family: verdana;}
     </style>
 </head>
 
 <body>
-<span id="election-cycle-min">1990</span> <input id="election-cycle" type="range" min="1990" max="2014" value="1990" step="2" oninput="yearUpdate(value)"> <span id="election-cycle-max">2014</span>
-<span id="yearDisplay"><output for=election-cycle id="election-cycle-val" oninput="yearUpdate(value)">1990</output></span>
-<a href="http://campaigncon.org"><img alt="campaingCON" style="border-width:0" src="img/campaignCon-logo-small.png" align="right"/></a>
+<span id="displayGroup">
+    <span id="election-cycle-min">1990</span> <input id="election-cycle" type="range" min="1990" max="2014" value="1990" step="2" oninput="yearUpdate(value)"> <span id="election-cycle-max">2014</span>
+
+    <span id="yearDisplay"><output for=election-cycle id="election-cycle-val" oninput="yearUpdate(value)">1990</output></span>
+    
+    <a href="http://campaigncon.org"><img alt="campaingCON" style="border-width:0" src="img/campaignCon-logo-small.png" align="right"/></a>
+</span>
 <div id="visualization"></div>
 <div><input type="checkbox" id="allowedToMove">: Allow movement.</input></div>
 <div id="mynetwork"></div>
@@ -65,6 +78,7 @@
 
 <script type="text/javascript">
 var network;
+
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var gephiImported;
@@ -72,23 +86,29 @@ var allowedToMoveCheckbox = document.getElementById("allowedToMove");
 allowedToMoveCheckbox.onchange = redrawAll;
 var lastYear = 1990;
 var nodeContent = document.getElementById("nodeContent");
+
 window.onload = function(){
     loadJSON("./data/1990.json",redrawAll);
     allowedToMoveCheckbox.checked = true;
 }
 var index = 1;
 function yearUpdate(e) {
+
     var fName = "./data/" + e + ".json"
+
     loadJSON(fName,redrawAll);
     var dif = (e-lastYear)/2;
     redrawChart(dif);
     lastYear=e;
+
     document.getElementById("election-cycle-val").value = e;
+
     if(e > 2002){
         allowedToMoveCheckbox.checked = false;
     }
     else allowedToMoveCheckbox.checked = true;
 }
+
 var container = document.getElementById('mynetwork');
 var data = {
     nodes: nodes,
@@ -116,8 +136,11 @@ var options = {
     physics: {barnesHut: {gravitationalConstant: -2500, springConstant: 0.002, springLength: 600, centralGravity: 0}},
     hideEdgesOnDrag: true
 };
+
 network = new vis.Network(container, data, options);
+
 network.on("click",onClick);
+
 /**
  * This function fills the DataSets. These DataSets will update the network.
  */
@@ -128,13 +151,17 @@ function redrawAll(gephiJSON) {
     else {
         gephiImported = gephiJSON;
     }
+
     nodes.clear();
     edges.clear();
+
     var allowedToMove = allowedToMoveCheckbox.checked;
     var parsed = vis.network.gephiParser.parseGephi(gephiJSON, {allowedToMove:allowedToMove});
+
     // add the parsed data to the DataSets.
     nodes.add(parsed.nodes);
     edges.add(parsed.edges);
+
     var allNodes = nodes.get({returnType:"Object"});
     var allEdges = edges.get({returnType:"Object"});
     for(eID in allEdges){
@@ -151,8 +178,10 @@ function redrawAll(gephiJSON) {
         }
     }
     edges.update(updateArray);
+
     network.zoomExtent(); // zoom to fit
 }
+
 function onClick(selectedItems) {
     var selectedNode = selectedItems.nodes;
     var selectedEdges = selectedItems.edges;
@@ -180,6 +209,7 @@ function onClick(selectedItems) {
     else {
         // we clear the level of separation in all nodes.
         clearLevelOfSeperation(allNodes);
+
         // we will now start to collect all the connected nodes we want to highlight.
         var connectedNodes = [];
         for (nodeId in  selectedItems.nodes) {
@@ -187,6 +217,7 @@ function onClick(selectedItems) {
                 connectedNodes.push(selectedItems.nodes[nodeId]);
             }
         }
+
         // we can store them into levels of separation and we could then later use this to define a color per level
         // any data can be added to a node, this is just stored in the nodeObject.
         storeLevelOfSeperation(connectedNodes,0, allNodes);
@@ -203,6 +234,7 @@ function onClick(selectedItems) {
                                 allNodes[nodeId].oldColor = allNodes[nodeId].color;
                                 allNodes[nodeId].color = 'rgba(150,150,150,0.75)';
                             }
+
                         }
                         else {
                             if (allNodes[nodeId].oldColor !== undefined) {
@@ -239,6 +271,7 @@ function onClick(selectedItems) {
         }
     }
     nodes.update(updateArray);
+
     var allEdges = edges.get({returnType:"Object"});
     for(eID in allEdges){
         var edge = allEdges[eID];
@@ -264,8 +297,11 @@ function onClick(selectedItems) {
         }
     }
     edges.update(updateArray);
+
     nodeContent.innerHTML = formatData(selectedNode, selectedEdges); // show the data in the div
 }
+
+
 /**
  * update the allNodes object with the level of separation.
  * Arrays are passed by reference, we do not need to return them because we are working in the same object.
@@ -279,6 +315,7 @@ function storeLevelOfSeperation(connectedNodes, level, allNodes) {
         allNodes[nodeId]['inConnectionList'] = true;
     }
 }
+
 function clearLevelOfSeperation(allNodes) {
     for (var nodeId in allNodes) {
         if (allNodes.hasOwnProperty(nodeId)) {
@@ -287,6 +324,7 @@ function clearLevelOfSeperation(allNodes) {
         }
     }
 }
+
 /**
  * Add the connected nodes to the list of nodes we already have
  *
@@ -298,6 +336,7 @@ function appendConnectedNodes(sourceNodes) {
     for (var i = 0; i < sourceNodes.length; i++) {
         tempSourceNodes.push(sourceNodes[i])
     }
+
     for (var i = 0; i < tempSourceNodes.length; i++) {
         var nodeId = tempSourceNodes[i];
         if (sourceNodes.indexOf(nodeId) == -1) {
@@ -308,6 +347,7 @@ function appendConnectedNodes(sourceNodes) {
     }
     tempSourceNodes = null;
 }
+
 /**
  * Join two arrays without duplicates
  * @param fromArray
@@ -320,6 +360,7 @@ function addUnique(fromArray, toArray) {
         }
     }
 }
+
 // from http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
 function syntaxHighlight(json) {
     if (typeof json != 'string') {
@@ -342,6 +383,7 @@ function syntaxHighlight(json) {
         return '<span class="' + cls + '">' + match + '</span>';
     });
 }
+
 function formatData(selectedNode, selectedEdges) {
         var allNodes = nodes.get({returnType:"Object"});
         var nodeData = nodes.get(selectedNode, {returnType:"Object"});
@@ -374,6 +416,7 @@ function formatData(selectedNode, selectedEdges) {
                     nodeText += 'Number of Contributions: ' + node.attributes['total count'] + '\n';
                     nodeText += 'State Representing: ' + node.attributes.recipientstate + '\n';
                     nodeText += 'Party: ' + node.attributes.recipientparty + '\n';
+
                     if(selectedEdges.length > 0){
                         nodeText += '\nContributor(s):\n';
                         for(edgeID in edgeData){
@@ -401,10 +444,12 @@ function formatData(selectedNode, selectedEdges) {
         }
         return '<span>' + nodeText + '</span>';
 }
+
 function currencyFormat(x){
     var intPart= String(x).split('.')[0];
     return '$' + intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
 function loadJSON(path, success, error) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -420,6 +465,7 @@ function loadJSON(path, success, error) {
     xhr.open("GET", path, true);
     xhr.send();
 }
+
 var container = document.getElementById('visualization');
 var allItems = [
 {x: '1990', y: 0.028},
@@ -437,6 +483,7 @@ var allItems = [
 {x: '2014', y: 26.430}
 ];
 var items = allItems.slice(0,index);
+
 var dataset = new vis.DataSet(items);
 var chartoptions = {
 dataAxis: {
@@ -452,12 +499,13 @@ dataAxis: {
     }
 },
 shaded: true,
-height: '220px',
-width: '1280px',
+height: '200px',
+width: '1240px',
 start: '1990',
 end: '2014'
 };
 var graph2d = new vis.Graph2d(container, dataset, chartoptions);
+
 function redrawChart(index){
     while(index != 0){
         if(index > 0){
@@ -474,6 +522,7 @@ function redrawChart(index){
         }
     }
 }
+
 </script>
 
 
