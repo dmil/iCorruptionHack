@@ -15,13 +15,8 @@ def get_file():
     '''
     Get file from URL
     '''
-
-    urls = ['ftp://ftp.fec.gov/FEC/2016/indiv16.zip']
-
-    v = subprocess.call(['sh', root+'/download.sh'])
+    subprocess.call(['sh', root+'/download.sh'])
     
-    print v
-
 def already_downloaded(file):
     '''
     Return true if we already have this version of the file

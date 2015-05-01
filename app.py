@@ -12,4 +12,4 @@ with open('keys.json','r') as keysfile:
     name = postgres_keys['database']
     del postgres_keys['database']
 
-db = PostgresqlDatabase(name, **postgres_keys)
+db = PostgresqlDatabase(name, autocommit=True, **postgres_keys)

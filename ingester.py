@@ -1,18 +1,24 @@
 """
 Push new data to sqlite database.
 """
-import datetime
+import datetime, os, re
 
 from peewee import *
 
 from app import db
 
-from models import File, Contribution
+from models import File, Contribution, ContributionChanges, ContributionHistory
+
+from flask_peewee.utils import get_dictionary_from_model
+
+from dateutil.parser import parse as dateparse
 
 def parse_fec_file(infile):
+    cycle = re.match(r"^.*(\d{4}_\d{4}).\w{3}$", infile.split("/")[-1], re.I).groups()[0].replace("_", "-")
+    date = dateparse(os.path.dirname(infile).split("/")[-1].replace("downloaded_", "").replace("_", "-")).date()
     with open(infile) as f:
         res = [parse_line(line) for line in f]
-        return [row_to_dict(val) for val in res]
+        return [row_to_dict(val, cycle, date) for val in res]
 
 def parse_line(l):
     vals = l.split('|')
@@ -32,29 +38,34 @@ def parse_line(l):
             vals[i] = datetime.datetime(month=int(vl[0:2]), day=int(vl[2:4]), year=int(vl[4:8]))
     return vals
 
-def row_to_dict(row):
+def row_to_dict(row, cycle, date):
     return {
-        "comittee_id" : row[0],
-        "ammendment_id" : row[1],
-        "report_type" : row[2],
-        "transaction_pgi" : row[3],
-        "image_num" : row[4],
-        "transaction_tp" : row[5],
-        "entity_tp" : row[6],
-        "name" : row[7],
-        "city" : row[8],
-        "state" : row[9],
-        "zip_code" : row[10],
-        "employer" : row[11],
-        "occupation" : row[12],
+        "cycle": cycle,
+        "date": date,
+        "comittee_id" : unicode(row[0]) if row[0] else None,
+        "ammendment_id" : unicode(row[1]) if row[1] else None,
+        "report_type" : unicode(row[2]) if row[2] else None,
+        "transaction_pgi" : unicode(row[3]) if row[3] else None,
+        "image_num" : unicode(row[4]) if row[4] else None,
+        "transaction_tp" : unicode(row[5])  if row[5] else None,
+        "entity_tp" : unicode(row[6]) if row[6] else None,
+        "name" : unicode(row[7]) if row[7] else None,
+        "city" : unicode(row[8]) if row[8] else None,
+        "state" : unicode(row[9]) if row[9] else None,
+        "zip_code" : unicode(row[10]) if row[10] else None,
+        "employer" : unicode(row[11]) if row[11] else None,
+        "occupation" : unicode(row[12]) if row[12] else None,
+
+        "transaction_id" : unicode(row[16]) if row[16] else None,
+        "memo_cd" : unicode(row[18]) if row[18] else None,
+        "memo_text" : unicode(row[19]) if row[19] else None,
+
+        "other_id" : unicode(row[15]) if row[15] else None,
+
         "transaction_date" : row[13],
-        "transaction_amount" : str(row[14]),
-        "other_id" : row[15],
-        "transaction_id" : row[16],
+        "transaction_amount" : float(row[14]),
         "file_num" : row[17],
-        "memo_cd" : row[18],
-        "memo_text" : row[19],
-        "sub_id" : row[20]
+        "sub_id" : int(row[20])
     }
 
 def ingested(filepath):
@@ -67,30 +78,64 @@ def ingested(filepath):
     except:
         return False
 
-def ingest(filepath):
+def seed_from(filepath):
     '''Ingest file into sqlite database'''
 
     print "Ingesting %s" % filepath
     rows = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath)[0]
-    myfile_id = myfile.id
+    myfile = File.get_or_create(name=filepath)
 
     for idx in range(0, len(rows), 500):
         print "Inserting row %d of %s" % (idx, filepath)
         rows_subset = rows[idx:idx+500]
-        for row in rows_subset:
-            row['file'] = myfile_id
-            row['sub_id'] = str(row['sub_id'])
         Contribution.insert_many(rows_subset).execute()
 
-if __name__ == '__main__':
-    filepaths = [
-        "data/FEC 2014 2.17.2014/itcont.txt",
-        "data/FEC 2014 3.22.2015/itcont.txt",
-        "data/FEC 2014 9.14.2014/itcont.txt"
-    ]
+def ingest(filepath):
+    '''Ingest file into database'''
+    print "Ingesting %s" % filepath
+    rows = parse_fec_file(filepath)
+    myfile = File.get_or_create(name=filepath)
 
-    for filepath in filepaths:
-        if not ingested(filepath):
-            ingest(filepath)
-   
+    # check history table to see if this file is done
+
+    with db.transaction():
+        for idx, row in enumerate(rows):
+            print "Checking row %d of %s" % (idx, filepath)
+
+            try:
+                contribution_in_db = Contribution.get(cycle=row['cycle'], sub_id=row['sub_id'])
+            except Contribution.DoesNotExist:
+                contribution_in_db = None
+
+            # If the row isn't already there, insert it
+            if not contribution_in_db:
+                print "\tInserting new row %d of %s" % (idx, filepath)
+                Contribution.create(**row)
+                ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+
+            # If the row is there, check for modifications
+            else:
+                # If it has not been modified, simply add a ContributionHistory object
+                contribution_in_db_dict = get_dictionary_from_model(contribution_in_db)
+
+                if {k:v for k,v in contribution_in_db_dict.iteritems() if k != "date"} == {k:v for k,v in row.iteritems() if k != "date"}:
+                    print "\tNo changes found in row %d of %s" % (idx, filepath)
+                    ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+                # If it has been modified, create a new object and give the new object a contribution history
+                else:
+                    print "\tDetected change in row %d of %s" % (idx, filepath)
+                    ContributionChanges.create(**contribution_in_db_dict)
+                    Contribution.update(**row)
+                    ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+
+# if __name__ == '__main__':
+#     filepaths = [
+#         "data/FEC 2014 2.17.2014/itcont.txt",
+#         "data/FEC 2014 3.22.2015/itcont.txt",
+#         "data/FEC 2014 9.14.2014/itcont.txt"
+#     ]
+
+#     for filepath in filepaths:
+#         if not ingested(filepath):
+#             ingest(filepath)
+

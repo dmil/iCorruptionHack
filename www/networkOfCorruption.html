@@ -28,6 +28,7 @@
             margin-top: -722px;
             margin-left: 1290px;
             padding:5px;
+            overflow: scroll;
         }
 
         pre {padding: 2px; margin: 2px; }
@@ -65,7 +66,7 @@
 <div id="visualization"></div>
 <div><input type="checkbox" id="allowedToMove">: Allow movement.</input></div>
 <div id="mynetwork"></div>
-<div class="nodeContent"><h4>Node Content:</h4> <pre id="nodeContent"></pre></div>
+<div class="nodeContent"><h4>Selection Data</h4> <pre id="nodeContent"></pre></div>
 
 
 
@@ -112,11 +113,11 @@ var options = {
     nodes: {
         shape: 'dot',
         fontFace: "Verdana",
-        fontSize: 56
+        fontSize: 56,
+        scaleFontWithValue: true
     },
     edges: {
-        width: 3,
-        inheritColor: "from"
+        width: 6
     },
     tooltip: {
         delay: 20,
@@ -127,11 +128,13 @@ var options = {
     },
     smoothCurves: {dynamic:false, type: "continuous"},
     stabilize: false,
-    physics: {barnesHut: {gravitationalConstant: -20000, springConstant: 0.002, springLength: 600, centralGravity: 0}},
+    physics: {barnesHut: {gravitationalConstant: -2500, springConstant: 0.002, springLength: 600, centralGravity: 0}},
     hideEdgesOnDrag: true
 };
 
 network = new vis.Network(container, data, options);
+
+network.on("click",onClick);
 
 /**
  * This function fills the DataSets. These DataSets will update the network.
@@ -154,17 +157,204 @@ function redrawAll(gephiJSON) {
     nodes.add(parsed.nodes);
     edges.add(parsed.edges);
 
-    //var data = nodes.get("C00193342"); // get the data from node 1
-    //nodeContent.innerHTML = syntaxHighlight(data); // show the data in the div
+    var allNodes = nodes.get({returnType:"Object"});
+    var allEdges = edges.get({returnType:"Object"});
+    for(eID in allEdges){
+        for (nodeId in allNodes) {
+            if (allEdges[eID].to === nodeId) {
+                allEdges[eID].color = allNodes[nodeId].color.background;
+            }
+        }
+    }
+    updateArray = [];
+    for (edgeId in allEdges) {
+        if (allEdges.hasOwnProperty(edgeId)) {
+            updateArray.push(allEdges[edgeId]);
+        }
+    }
+    edges.update(updateArray);
+
     network.zoomExtent(); // zoom to fit
 }
 
-// add event listener
-network.on('select', function(id) {
-    var nodeData = nodes.get(id.nodes);
-    var edgeData = edges.get(id.edges);
-    nodeContent.innerHTML = "Node Data: " + syntaxHighlight(nodeData) + "\n Edge Data: " + syntaxHighlight(edgeData); // show the data in the div
-});
+function onClick(selectedItems) {
+    var selectedNode = selectedItems.nodes;
+    var selectedEdges = selectedItems.edges;
+    var nodeId;
+    var degrees = 1;
+    // we get all data from the dataset once to avoid updating multiple times.
+    var allNodes = nodes.get({returnType:"Object"});
+    if (selectedItems.nodes.length == 0) {
+        // restore on unselect
+        for (nodeId in allNodes) {
+            if (allNodes.hasOwnProperty(nodeId)) {
+                if (allNodes[nodeId].oldColor !== undefined) {
+                    allNodes[nodeId].color = allNodes[nodeId].oldColor;
+                    allNodes[nodeId].oldColor = undefined;
+                }
+                if (allNodes[nodeId].oldLabel !== undefined) {
+                    allNodes[nodeId].label = allNodes[nodeId].oldLabel;
+                    allNodes[nodeId].oldLabel = undefined;
+                }
+                allNodes[nodeId]['levelOfSeperation'] = undefined;
+                allNodes[nodeId]['inConnectionList'] = undefined;
+            }
+        }
+    }
+    else {
+        // we clear the level of separation in all nodes.
+        clearLevelOfSeperation(allNodes);
+
+        // we will now start to collect all the connected nodes we want to highlight.
+        var connectedNodes = [];
+        for (nodeId in  selectedItems.nodes) {
+            if (selectedItems.nodes.hasOwnProperty(nodeId)) {
+                connectedNodes.push(selectedItems.nodes[nodeId]);
+            }
+        }
+
+        // we can store them into levels of separation and we could then later use this to define a color per level
+        // any data can be added to a node, this is just stored in the nodeObject.
+        storeLevelOfSeperation(connectedNodes,0, allNodes);
+        for (var i = 1; i < degrees + 1; i++) {
+            appendConnectedNodes(connectedNodes);
+            storeLevelOfSeperation(connectedNodes, i, allNodes);
+        }
+        for (nodeId in allNodes) {
+            if (allNodes.hasOwnProperty(nodeId)) {
+                if (allNodes[nodeId]['inConnectionList'] == true) {
+                    if (allNodes[nodeId]['levelOfSeperation'] !== undefined) {
+                        if (allNodes[nodeId]['levelOfSeperation'] >= 2) {
+                            if (allNodes[nodeId].oldColor !== undefined) {
+                                allNodes[nodeId].oldColor = allNodes[nodeId].color;
+                                allNodes[nodeId].color = 'rgba(150,150,150,0.75)';
+                            }
+
+                        }
+                        else {
+                            if (allNodes[nodeId].oldColor !== undefined) {
+                                allNodes[nodeId].color = allNodes[nodeId].oldColor;
+                            }
+                        }
+                    }
+                    if (allNodes[nodeId].oldColor !== undefined) {
+                        allNodes[nodeId].color = allNodes[nodeId].oldColor;
+                        allNodes[nodeId].oldColor = undefined;
+                    }
+                    if (allNodes[nodeId].oldLabel !== undefined) {
+                        allNodes[nodeId].label = allNodes[nodeId].oldLabel;
+                        allNodes[nodeId].oldLabel = undefined;
+                    }
+                }
+                else {
+                    if (allNodes[nodeId].oldColor === undefined) {
+                        allNodes[nodeId].oldColor = allNodes[nodeId].color;
+                        allNodes[nodeId].color = 'rgba(200,200,200,0.5)';
+                    }
+                    if (allNodes[nodeId].oldLabel === undefined) {
+                        allNodes[nodeId].oldLabel = allNodes[nodeId].label;
+                        allNodes[nodeId].label = "";
+                    }
+                }
+            }
+        }
+    }
+    var updateArray = [];
+    for (nodeId in allNodes) {
+        if (allNodes.hasOwnProperty(nodeId)) {
+            updateArray.push(allNodes[nodeId]);
+        }
+    }
+    nodes.update(updateArray);
+
+    var allEdges = edges.get({returnType:"Object"});
+    for(eID in allEdges){
+        var edge = allEdges[eID];
+        var fromNode = allNodes[edge.from];
+        var toNode = allNodes[edge.to];
+        
+        if(fromNode.oldColor !== undefined){
+            edge.color = fromNode.color;
+        }
+        else{
+            if(toNode.oldColor !== undefined){
+                edge.color = toNode.color;
+            }
+            else{
+               edge.color = toNode.color.background; 
+            }
+        }
+    }
+    updateArray = [];
+    for (edgeId in allEdges) {
+        if (allEdges.hasOwnProperty(edgeId)) {
+            updateArray.push(allEdges[edgeId]);
+        }
+    }
+    edges.update(updateArray);
+
+    nodeContent.innerHTML = formatData(selectedNode, selectedEdges); // show the data in the div
+}
+
+
+/**
+ * update the allNodes object with the level of separation.
+ * Arrays are passed by reference, we do not need to return them because we are working in the same object.
+ */
+function storeLevelOfSeperation(connectedNodes, level, allNodes) {
+    for (var i = 0; i < connectedNodes.length; i++) {
+        var nodeId = connectedNodes[i];
+        if (allNodes[nodeId]['levelOfSeperation'] === undefined) {
+            allNodes[nodeId]['levelOfSeperation'] = level;
+        }
+        allNodes[nodeId]['inConnectionList'] = true;
+    }
+}
+
+function clearLevelOfSeperation(allNodes) {
+    for (var nodeId in allNodes) {
+        if (allNodes.hasOwnProperty(nodeId)) {
+            allNodes[nodeId]['levelOfSeperation'] = undefined;
+            allNodes[nodeId]['inConnectionList'] = undefined;
+        }
+    }
+}
+
+/**
+ * Add the connected nodes to the list of nodes we already have
+ *
+ *
+ */
+function appendConnectedNodes(sourceNodes) {
+    var tempSourceNodes = [];
+    // first we make a copy of the nodes so we do not extend the array we loop over.
+    for (var i = 0; i < sourceNodes.length; i++) {
+        tempSourceNodes.push(sourceNodes[i])
+    }
+
+    for (var i = 0; i < tempSourceNodes.length; i++) {
+        var nodeId = tempSourceNodes[i];
+        if (sourceNodes.indexOf(nodeId) == -1) {
+            sourceNodes.push(nodeId);
+        }
+        var connectedNodes = network.getConnectedNodes(nodeId);
+        addUnique(connectedNodes,sourceNodes);
+    }
+    tempSourceNodes = null;
+}
+
+/**
+ * Join two arrays without duplicates
+ * @param fromArray
+ * @param toArray
+ */
+function addUnique(fromArray, toArray) {
+    for (var i = 0; i < fromArray.length; i++) {
+        if (toArray.indexOf(fromArray[i]) == -1) {
+            toArray.push(fromArray[i]);
+        }
+    }
+}
 
 // from http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
 function syntaxHighlight(json) {
@@ -187,6 +377,72 @@ function syntaxHighlight(json) {
         }
         return '<span class="' + cls + '">' + match + '</span>';
     });
+}
+
+function formatData(selectedNode, selectedEdges) {
+        var allNodes = nodes.get({returnType:"Object"});
+        var nodeData = nodes.get(selectedNode, {returnType:"Object"});
+        var edgeData = edges.get(selectedEdges, {returnType:"Object"});
+        var nodeText="";
+        if(selectedNode.length > 0){
+            for(nodeId in nodeData){
+                var node = nodeData[nodeId];
+                if(node.attributes.recipientparty === undefined){
+                    nodeText = 'Contributor: ' + node.label + '\n';
+                    nodeText += 'Total Contributions: ' + currencyFormat(node.attributes.amount) +  '\n';
+                    nodeText += 'Number of Contributions: ' + node.attributes['total count'] + '\n';
+                    nodeText += 'Contributor State: ' + node.attributes.contributorstate + '\n';
+                    nodeText += 'Employer: ' + node.attributes.employer + '\n';
+                    nodeText += 'Gender: ' + node.attributes.gender + '\n';
+                    if(selectedEdges.length > 0){
+                        nodeText += '\nContribution Recipient(s):\n';
+                        for(edgeID in edgeData){
+                            var edge = edgeData[edgeID];
+                            var toNode = allNodes[edge.to];
+                            nodeText += '  Candidate: ' + toNode.label +  '\n';
+                            nodeText += '    Total Contributions: ' + currencyFormat(edge.attributes.Weight) +  '\n';
+                            nodeText += '    Number of Contributions: ' + edge.attributes['count'] + '\n';
+                        }
+                    }
+                }
+                else{
+                    nodeText = 'Candidate: ' + node.label + '\n';
+                    nodeText += 'Total Contributions: ' + currencyFormat(node.attributes.amount) +  '\n';
+                    nodeText += 'Number of Contributions: ' + node.attributes['total count'] + '\n';
+                    nodeText += 'State Representing: ' + node.attributes.recipientstate + '\n';
+                    nodeText += 'Party: ' + node.attributes.recipientparty + '\n';
+
+                    if(selectedEdges.length > 0){
+                        nodeText += '\nContributor(s):\n';
+                        for(edgeID in edgeData){
+                            var edge = edgeData[edgeID];
+                            nodeText += '  Contributor: ' + allNodes[edge.from].label +  '\n';
+                            nodeText += '    Total Contributions: ' + currencyFormat(edge.attributes.Weight) +  '\n';
+                            nodeText += '    Number of Contributions: ' + edge.attributes['count'] + '\n';
+                        }
+                    }
+                }
+                
+            }
+        }
+        else{
+            if(selectedEdges.length > 0){
+                nodeText += '\nContribution(s):\n';
+                for(edgeID in edgeData){
+                    var edge = edgeData[edgeID];
+                    nodeText += '  Contributor: ' + allNodes[edge.from].label +  '\n';
+                    nodeText += '  Recipient: ' + allNodes[edge.to].label +  '\n';
+                    nodeText += '    Total Contributions: ' + currencyFormat(edge.attributes.Weight) +  '\n';
+                    nodeText += '    Number of Contributions: ' + edge.attributes['count'] + '\n';
+                }
+            }
+        }
+        return '<span>' + nodeText + '</span>';
+}
+
+function currencyFormat(x){
+    var intPart= String(x).split('.')[0];
+    return '$' + intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function loadJSON(path, success, error) {
@@ -224,7 +480,7 @@ var allItems = [
 var items = allItems.slice(0,index);
 
 var dataset = new vis.DataSet(items);
-var options = {
+var chartoptions = {
 dataAxis: {
     title: {
         left: {
@@ -243,7 +499,7 @@ width: '1280px',
 start: '1990',
 end: '2014'
 };
-var graph2d = new vis.Graph2d(container, dataset, options);
+var graph2d = new vis.Graph2d(container, dataset, chartoptions);
 
 function redrawChart(index){
     while(index != 0){
