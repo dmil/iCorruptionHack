@@ -7,6 +7,11 @@ Historically there have been inconsistencies between the FEC bulk data and the F
 
 http://ethics.harvard.edu/blog/researchers-find-inconsistencies-fec-data
 
+# Stay in Touch!
+Leave us your name and email address. No spam, only important updates, we promise!
+
+http://goo.gl/qjbWDO
+
 # Getting Started
 
 1. Create new database
