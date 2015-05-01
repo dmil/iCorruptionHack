@@ -9,6 +9,7 @@ http://ethics.harvard.edu/blog/researchers-find-inconsistencies-fec-data
 
 # Stay in Touch!
 Leave us your name and email address. No spam, only important updates, we promise!
+
 http://goo.gl/qjbWDO
 
 # Getting Started
