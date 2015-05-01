@@ -29,8 +29,8 @@ python main.py reset
 
 1. Download data
 ```
-# Download
-sh download.sh
+# Download the data only if there is a new version on the FEC website
+python download.py
 # Ingest into database
 python main.py ingest
 ```
