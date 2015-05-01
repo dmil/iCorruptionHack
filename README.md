@@ -1,6 +1,3 @@
-# iCorruptionHack
-http://ethics.harvard.edu/event/ending-institutional-corruption-hackathon
-
 # Getting Started
 
 1. Create new database
@@ -24,3 +21,9 @@ sh download.sh
 # Ingest into database
 python main.py ingest
 ```
+
+# Hack4Cogress
+https://hackpad.com/Hack4Congress-DC-9oz0P32pSCa
+
+# iCorruptionHack
+http://ethics.harvard.edu/event/ending-institutional-corruption-hackathon
