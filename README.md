@@ -3,9 +3,8 @@ Campaign finance data is an important part of keeping our democracy accountable.
 
 Tracing the data overtime can surface possible data issues and keep track of how data is amended over time. Testing the new API against the current, canonical data will identify potential data quality issues in the new data infrastructure that can then be fixed before release. 
 
-Historically there have been inconsistencies between the FEC bulk data and the FEC individual records. In transferring from one database to another, or going from individual records to bulk data releases, data is lost or corrupted. Our project helps ensure that data coming from the government is sound and can be used for accurate reporting. 
+Historically there have been [reports of inconsistencies](http://ethics.harvard.edu/blog/researchers-find-inconsistencies-fec-data) between the FEC bulk data and the FEC individual records. In transferring from one database to another, or going from individual records to bulk data releases, data is lost or corrupted. Our project helps ensure that data coming from the government is sound and can be used for accurate reporting. 
 
-http://ethics.harvard.edu/blog/researchers-find-inconsistencies-fec-data
 
 # Stay in Touch!
 Leave us your name and email address. No spam, only important updates, we promise!
