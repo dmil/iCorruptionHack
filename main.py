@@ -12,7 +12,7 @@ def createtables_db():
     db.connect()
 
     # Create the tables.
-    db.create_tables([Contribution, ContributionChanges, ContributionHistory, File])
+    db.create_tables([Contribution, ContributionChanges, ContributionHistory, File, CampaignAndComitteeSummary])
 
     print "Created tables"
 
