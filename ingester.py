@@ -54,7 +54,7 @@ def row_to_dict(row):
         "file_num" : row[17],
         "memo_cd" : row[18],
         "memo_text" : row[19],
-        "sub_id" : row[20]
+        "sub_id" : str(row[20])
     }
 
 def ingested(filepath):
@@ -67,21 +67,44 @@ def ingested(filepath):
     except:
         return False
 
-def ingest(filepath):
+def seed_from(filepath):
     '''Ingest file into sqlite database'''
 
     print "Ingesting %s" % filepath
     rows = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath)[0]
-    myfile_id = myfile.id
+    myfile = File.get_or_create(name=filepath)
 
     for idx in range(0, len(rows), 500):
         print "Inserting row %d of %s" % (idx, filepath)
         rows_subset = rows[idx:idx+500]
-        for row in rows_subset:
-            row['file'] = myfile_id
-            row['sub_id'] = str(row['sub_id'])
         Contribution.insert_many(rows_subset).execute()
+
+def ingest(filepath):
+    '''Ingest file into database'''
+
+    print "Ingesting %s" % filepath
+    rows_in_file = parse_fec_file(filepath)
+    myfile = File.get_or_create(name=filepath)
+
+    with db.transaction():
+        for idx, row in enumerate(rows):
+            print "Inserting row %d of %s" % (idx, filepath)
+
+            for row in rows_subset:
+                # If the row isn't already there, insert it
+                if :
+                    rows_to_insert.append(row)
+                    pass
+                # If the row is there, check for modifications
+                elif:
+                    # If it has not been modified, simply add a ContributionHistory object
+                    if:
+                    # If it has been modified, create a new object and give the new object a contribution history
+                    else:
+                        pass
+
+            Contribution.insert_many(rows_subset).execute()
+
 
 if __name__ == '__main__':
     filepaths = [
@@ -93,4 +116,4 @@ if __name__ == '__main__':
     for filepath in filepaths:
         if not ingested(filepath):
             ingest(filepath)
-   
+
