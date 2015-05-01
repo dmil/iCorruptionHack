@@ -18,8 +18,8 @@ class File(BaseModel):
     def __str__(self):
         return self.name
 
-class Contribution(BaseModel):
-    id = PrimaryKeyField()
+class ContributionBaseModel(BaseModel):
+    cycle = CharField(null=False)
     comittee_id = CharField(null=True, default=None)
     ammendment_id = CharField(null=True, default=None)
     report_type = CharField(null=True, default=None)
@@ -40,5 +40,26 @@ class Contribution(BaseModel):
     file_num = IntegerField(null=True, default=None)
     memo_cd = CharField(null=True, default=None)
     memo_text = CharField(null=True, default=None)
-    sub_id = CharField(null=True, default=None)
-    file = ForeignKeyField(File, related_name='contributions', null=True, default=None)
+
+# Most Recent Contributions
+class Contribution(BaseModel, ContributionBaseModel):
+    sub_id = CharField(null=False)
+
+    class Meta:
+        primary_key = CompositeKey('cycle', 'sub_id')
+
+# ContributionChanges
+class ContributionChanges(BaseModel, ContributionBaseModel):
+    sub_id = ForeignKeyField(Contribution, related_name='changes')
+    date = DateField(null=False)
+
+    class Meta:
+        primary_key = CompositeKey('date', 'cycle', 'sub_id')
+
+# ContributionHistory
+class ContributionHistory(BaseModel):
+    sub_id = ForeignKeyField(Contribution, related_name='history')
+    date = DateField(null=False)
+
+    class Meta:
+        primary_key = CompositeKey('date', 'cycle', 'sub_id')
