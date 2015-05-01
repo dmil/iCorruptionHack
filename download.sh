@@ -16,7 +16,7 @@ wget -O 'CampaignAndCommitteeSummary.csv' 'http://www.fec.gov/data/CampaignAndCo
 unzip '*.zip'
 rm *.zip
 
-YEARS="_2013_2014"
+YEARS="_2015_2016"
 mv 'itcont.txt' 'itcont.txt'$YEARS'.txt'
 mv 'itoth.txt' 'itoth'$YEARS'.txt'
 mv 'cm.txt' 'cm'$YEARS'.txt'
@@ -25,4 +25,3 @@ mv 'ccl.txt' 'ccl'$YEARS'.txt'
 mv 'itpas2.txt' 'itpas2'$YEARS'.txt'
 mv 'opexp.txt' 'opexp'$YEARS'.txt'
 mv 'CampaignAndCommitteeSummary.csv' 'CampaignAndCommitteeSummary'$YEARS'.csv'
-
