@@ -1,4 +1,5 @@
-FILEPATH="data/"downloaded_`date +%Y_%m_%d`/
+# FILEPATH="data/"downloaded_`date +%Y_%m_%d`/
+FILEPATH=$1
 
 mkdir -p $FILEPATH
 
