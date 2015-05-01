@@ -14,10 +14,12 @@ http://goo.gl/qjbWDO
 # Getting Started
 
 1. Create new database
+
 2. Edit `keys.example.json` to include database parameters and rename it to `keys.json`
 ```
 createdb campaigncon
 ```
+
 3. Seed the database
 ```
 python main.py reset
