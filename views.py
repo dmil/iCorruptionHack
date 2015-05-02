@@ -5,8 +5,9 @@ from flask_peewee.utils import get_dictionary_from_model
 
 from flask import request
 
-# from bson import json_util
 import json
+
+from datadiff import diff
 
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
@@ -34,10 +35,16 @@ def hello():
 	ret = []
 
 	for contrib in ContributionChanges.select().where(ContributionChanges.date == before):
+		before_contrib_dict = get_dictionary_from_model(contrib)
+		after_contrib_dict = get_dictionary_from_model(Contribution.get(sub_id=contrib.sub_id).get_on_date(after))
+
 		ret.append(
 			{
-				"before": get_dictionary_from_model(contrib),
-				"after": get_dictionary_from_model(Contribution.get(sub_id=contrib.sub_id).get_on_date(after))
+				"before": before_contrib_dict,
+				"after": after_contrib_dict,
+				"changes": [
+					x for x in diff(before_contrib_dict, after_contrib_dict).diffs if x[0] not in ['equal', 'context_end_container'] and x[1][0][0] not in ['contribution', 'date', 'id']
+				]
 			}
 		)
 
