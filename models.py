@@ -23,9 +23,10 @@ class BaseModel(Model):
 class File(BaseModel):
     id = PrimaryKeyField()
     name = CharField(null=False)
-    # years = CharField(null=False)
+    years = CharField(null=False)
     sha1 = CharField(null=False)
-    # updated = DateTimeField(null=False)
+    updated = DateTimeField(null=False)
+    ingested = BooleanField(null=False)
 
     def __str__(self):
         return self.name
