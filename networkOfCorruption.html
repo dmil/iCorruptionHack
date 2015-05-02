@@ -156,6 +156,12 @@ function redrawAll(gephiJSON) {
 }
 function onClick(selectedItems) {
     network.storePositions();
+
+        var year = document.getElementById("election-cycle-val").value;
+
+    if(year > 2002){
+        network.freezeSimulation(true);
+    }
     var selectedNode = selectedItems.nodes;
     var selectedEdges = selectedItems.edges;
     var nodeId;
