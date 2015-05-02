@@ -14,6 +14,10 @@ from flask_peewee.utils import get_dictionary_from_model
 
 from dateutil.parser import parse as dateparse
 
+from datadiff import diff
+from blessings import Terminal
+t = Terminal()
+
 def sha1OfFile(filepath):
     with open(filepath, 'rb') as f:
         return hashlib.sha1(f.read()).hexdigest()
@@ -45,7 +49,7 @@ def parse_line(l):
 
 def row_to_dict(row, cycle, date):
     return {
-        "cycle": cycle,
+        "cycle": unicode(cycle),
         "date": date,
         "comittee_id" : unicode(row[0]) if row[0] else None,
         "ammendment_id" : unicode(row[1]) if row[1] else None,
@@ -92,7 +96,7 @@ def seed_from(filepath):
                                 sha1=sha1OfFile(filepath))
 
     for idx in range(0, len(rows), 500):
-        print "Inserting row %d of %s" % (idx, filepath)
+        print "Inserting row %d of %d from %s" % (idx, len(rows), filepath)
         rows_subset = rows[idx:idx+500]
         Contribution.insert_many(rows_subset).execute()
 
@@ -100,13 +104,14 @@ def ingest(filepath):
     '''Ingest file into database'''
     print "Ingesting %s" % filepath
     rows = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath)
+    myfile = File.get_or_create(name=filepath,
+                                sha1=sha1OfFile(filepath))
 
     # check history table to see if this file is done
 
     with db.transaction():
         for idx, row in enumerate(rows):
-            print "Checking row %d of %s" % (idx, filepath)
+            print "Checking row %d of %d from %s" % (idx, len(rows), filepath)
 
             try:
                 contribution_in_db = Contribution.get(cycle=row['cycle'], sub_id=row['sub_id'])
@@ -115,24 +120,37 @@ def ingest(filepath):
 
             # If the row isn't already there, insert it
             if not contribution_in_db:
-                print "\tInserting new row %d of %s" % (idx, filepath)
-                Contribution.create(**row)
-                ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+                print t.cyan("\tInserting new row %d of %s" % (idx, filepath))
+                new_contribution = Contribution.create(**row)
+                ContributionHistory.create(contribution=new_contribution.id, date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
 
             # If the row is there, check for modifications
             else:
                 # If it has not been modified, simply add a ContributionHistory object
                 contribution_in_db_dict = get_dictionary_from_model(contribution_in_db)
 
-                if {k:v for k,v in contribution_in_db_dict.iteritems() if k != "date"} == {k:v for k,v in row.iteritems() if k != "date"}:
-                    print "\tNo changes found in row %d of %s" % (idx, filepath)
-                    ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+                # x = {k:v for k,v in contribution_in_db_dict.iteritems() if k not in ["date", "id"]}
+                # y = {k:v for k,v in row.iteritems() if k != "date"}
+
+                if {k:v for k,v in contribution_in_db_dict.iteritems() if k not in ["date", "id"]} == {k:v for k,v in row.iteritems() if k != "date"}:
+                    print t.white("\tNo changes found in row %d of %s" % (idx, filepath))
+                    ContributionHistory.create(contribution=contribution_in_db.id, date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
                 # If it has been modified, create a new object and give the new object a contribution history
                 else:
-                    print "\tDetected change in row %d of %s" % (idx, filepath)
-                    ContributionChanges.create(**contribution_in_db_dict)
-                    Contribution.update(**row)
-                    ContributionHistory.create(date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+                    print t.magenta("\tDetected change in row %d of %s" % (idx, filepath))
+                    # print diff(x,y)
+
+                    # import pdb; pdb.set_trace()
+
+                    ContributionChanges.create(contribution=contribution_in_db.id, **{k:v for k,v in contribution_in_db_dict.iteritems() if k != "id"})
+
+                    for k,v in row.iteritems():
+                        if v != getattr(contribution_in_db, k):
+                            setattr(contribution_in_db, k, v)
+
+                    contribution_in_db.save()
+
+                    ContributionHistory.create(contribution=contribution_in_db.id, date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
 
 # if __name__ == '__main__':
 #     filepaths = [

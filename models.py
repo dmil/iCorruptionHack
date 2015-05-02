@@ -3,6 +3,8 @@ from blessings import Terminal
 from peewee import *
 from app import db
 
+from flask_peewee.utils import get_dictionary_from_model
+
 t = Terminal()
 
 class BaseModel(Model):
@@ -12,9 +14,9 @@ class BaseModel(Model):
 class File(BaseModel):
     id = PrimaryKeyField()
     name = CharField(null=False)
-    years = CharField(null=False)
+    # years = CharField(null=False)
     sha1 = CharField(null=False)
-    updated = DateTimeField(null=False)
+    # updated = DateTimeField(null=False)
 
     def __str__(self):
         return self.name
@@ -45,30 +47,35 @@ class ContributionBaseModel(BaseModel):
     memo_cd = CharField(null=True, default=None)
     memo_text = CharField(null=True, default=None)
 
-    def changes(self):
-        pass
-
-    def history(self):
-        pass
-
 # Most Recent Contributions
 class Contribution(ContributionBaseModel):
+    id = PrimaryKeyField()
+
     class Meta:
-        primary_key = CompositeKey('cycle', 'sub_id')
+        # primary_key = CompositeKey('cycle', 'sub_id')
+        indexes = ((('cycle', 'sub_id'), True),)
 
 # ContributionChanges
 class ContributionChanges(ContributionBaseModel):
+    id = PrimaryKeyField()
+    contribution = ForeignKeyField(Contribution, related_name='changes')
+
     class Meta:
-        primary_key = CompositeKey('date', 'cycle', 'sub_id')
+        # primary_key = CompositeKey('date', 'cycle', 'sub_id')
+        indexes = ((('date', 'cycle', 'sub_id'), True),)
 
 # ContributionHistory
 class ContributionHistory(BaseModel):
+    id = PrimaryKeyField()
+    contribution = ForeignKeyField(Contribution, related_name='history')
+
     sub_id = BigIntegerField(null=False)
     cycle = CharField(null=False)
     date = DateField(null=False)
 
     class Meta:
-        primary_key = CompositeKey('date', 'cycle', 'sub_id')
+        # primary_key = CompositeKey('date', 'cycle', 'sub_id')
+        indexes = ((('date', 'cycle', 'sub_id'), True),)
 
 # CampaignAndCommiteeSummary
 class CampaignAndComitteeSummary(BaseModel):
