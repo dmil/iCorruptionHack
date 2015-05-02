@@ -18,30 +18,27 @@
     <div class="container">
       <h1>Difference between {{before}} and {{after}}</h1>
 
-      <table class="table">
-
-      <thead>
-      <tr>
-        {% for k,v in ret[0].before.iteritems() %}
-          <th>{{k}}</th>
-        {% endfor %}
-      </tr>
-      </thead>
-
       {% for row in ret %}
+      <table class="table">
+        <thead>
+          <tr>
+            {% for k,v in ret[0].before.iteritems() %}
+              <th>{{k}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
         <tr>
           {% for k,v in row.before.iteritems() %}
             <td {% if k in row.changes %} class="highlight"{% endif%}>{{ v }}</td>
           {% endfor %}
         </tr>
-
         <tr>
           {% for k,v in row.after.iteritems() %}
             <td {% if k in row.changes %} class="highlight"{% endif%}>{{ v }}</td>
           {% endfor %}
         </tr>
-      {% endfor %}
       </table>
+      {% endfor %}
 
     </div>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>

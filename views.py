@@ -127,7 +127,7 @@ def hello():
 			}
 		)
 
-		print ret[-1]['changes']
+		# print ret[-1]['changes']
 
 	return render_template('diff.html', ret=ret, before=before, after=after)
 	# return json.dumps(ret, default=date_handler)
