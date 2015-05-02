@@ -11,7 +11,7 @@
         }
         #mynetwork {
             width: 920px;
-            height: 730px;
+            height: 650px;
             border: 1px solid lightgray;
         }
 
@@ -26,8 +26,8 @@
             position: relative;
             border: 1px solid lightgray;
             width:310px;
-            height:720px;
-            margin-top: -732px;
+            height:640px;
+            margin-top: -652px;
             margin-left: 930px;
             padding:5px;
             overflow: scroll;
@@ -185,6 +185,11 @@ function redrawAll(gephiJSON) {
 
 function onClick(selectedItems) {
     network.storePositions();
+    var year = document.getElementById("election-cycle-val").value;
+
+    if(year > 2002){
+        network.freezeSimulation(true);
+    }
     var selectedNode = selectedItems.nodes;
     var selectedEdges = selectedItems.edges;
     var nodeId;
