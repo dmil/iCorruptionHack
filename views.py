@@ -3,7 +3,7 @@ from models import File, Contribution, ContributionChanges, ContributionHistory
 
 from flask_peewee.utils import get_dictionary_from_model
 
-from flask import request
+from flask import request, render_template
 
 import json
 
@@ -27,6 +27,9 @@ def summary():
 
     return text
 
+def dumps(x, **args):
+	return json.dumps(x, default=date_handler, **args)
+
 @app.route('/')
 def hello():
 	before = dateparse(request.args.get('before')).date()
@@ -48,4 +51,5 @@ def hello():
 			}
 		)
 
-	return json.dumps(ret, default=date_handler)
+	return render_template('diff.html', ret=ret, dumps=dumps)
+	# return json.dumps(ret, default=date_handler)
