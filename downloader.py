@@ -7,7 +7,7 @@ http://www.fec.gov/finance/disclosure/ftpdet.shtml
 
 from app import root
 import peewee
-import os, subprocess
+import os, subprocess, re
 from datetime import date
 import hashlib
 
