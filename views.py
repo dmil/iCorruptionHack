@@ -41,6 +41,10 @@ def hello():
 		before_contrib_dict = get_dictionary_from_model(contrib)
 		after_contrib_dict = get_dictionary_from_model(Contribution.get(sub_id=contrib.sub_id).get_on_date(after))
 
+		before_contrib_dict.pop('id')
+		before_contrib_dict.pop('contribution')
+		after_contrib_dict.pop('id')
+
 		ret.append(
 			{
 				"before": before_contrib_dict,

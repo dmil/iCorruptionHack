@@ -16,9 +16,9 @@
   </head>
   <body>
     <div class="container">
-      <p>Difference between {{before}} and {{after}}</p>
+      <h1>Difference between {{before}} and {{after}}</h1>
 
-      <table>
+      <table class="table">
       {% for row in ret %}
         <tr>
           {% for k,v in row.before.iteritems() %}
