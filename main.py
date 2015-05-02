@@ -21,7 +21,7 @@ def clear_db():
     print "Cleared database"
 
 def seed_db():
-    seed_from("data/downloaded_2015_04_05/itcont_2013_2014.txt")
+    seed_from("data/downloaded_2014_02_17/itcont_2013_2014.txt")
 
 def reset_database():
     # Drop all tables in postgres database
@@ -43,5 +43,5 @@ if __name__ == '__main__':
     elif mode == 'reset':
         reset_database()
     elif mode == 'ingest':
-        ingest("data/downloaded_2015_05_01/itcont_2013_2014.txt")
+        ingest("data/downloaded_2014_09_14/itcont_2013_2014.txt")
 
