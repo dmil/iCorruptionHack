@@ -198,3 +198,24 @@ class CampaignAndComitteeSummary(BaseModel):
     uni_oth_inc = CharField(null=False)
     uni_oth_ref_or_reb = CharField(null=False)
     uni_ref_or_reb = CharField(null=False)
+
+
+# Transaction Type Codes
+# http://www.fec.gov/finance/disclosure/metadata/DataDictionaryTransactionTypeCodes.shtml
+
+# Report Type Codes
+# http://www.fec.gov/finance/disclosure/metadata/ReportTypeCodes.shtml
+
+# Ammendment ID
+# Indicates if the report being filed is new (N), an amendment (A) to a previous report, or a
+# termination (T) report.
+
+# Transaction PGI
+# This code indicates the election for which the contribution was made. EYYYY (election plus election year)
+# P = Primary
+# G = General
+# O = Other
+# C = Convention
+# R = Runoff
+# S = Special
+# E = Recount
