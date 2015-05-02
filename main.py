@@ -36,7 +36,10 @@ def reset_database():
 if __name__ == '__main__':
     mode = sys.argv[1]
     if mode == 'run':
-        app.run()
+
+        import views
+
+        app.run(debug=True)
     elif mode == 'reset':
         reset_database()
     elif mode == 'ingest':

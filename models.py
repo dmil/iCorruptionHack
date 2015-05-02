@@ -3,7 +3,16 @@ from blessings import Terminal
 from peewee import *
 from app import db
 
+import datetime
+
 from flask_peewee.utils import get_dictionary_from_model
+
+from itertools import tee, izip
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return izip(a, b)
 
 t = Terminal()
 
@@ -50,6 +59,23 @@ class ContributionBaseModel(BaseModel):
 # Most Recent Contributions
 class Contribution(ContributionBaseModel):
     id = PrimaryKeyField()
+
+    def get_on_date(self, date):
+        if self.date == date:
+            return self
+        elif self.date < date:
+            raise Exception("%s date not found in database. too far in future" % date.strftime("%x"))
+        else:
+            changes = sorted(self.changes, key=lambda x: x.date, reverse=True)
+
+            if self.date > date and changes[0].date <= date:
+                return changes[0]
+
+            for contrib_a, contrib_b in pairwise(changes):
+                if contrib_a.date >= date and contrib_b.date <= date:
+                    return contrib_a
+            else:
+                raise Exception("%s date not found in database. too far in past" % date.strftime("%x"))
 
     class Meta:
         # primary_key = CompositeKey('cycle', 'sub_id')
