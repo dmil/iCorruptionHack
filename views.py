@@ -45,11 +45,11 @@ def hello():
 			{
 				"before": before_contrib_dict,
 				"after": after_contrib_dict,
-				"changes": [
-					x for x in diff(before_contrib_dict, after_contrib_dict).diffs if x[0] not in ['equal', 'context_end_container'] and x[1][0][0] not in ['contribution', 'date', 'id']
-				]
+				"changes": list(set([x[1][0][0] for x in diff(before_contrib_dict, after_contrib_dict).diffs if x[0] not in ["equal", "context_end_container"] and x[1][0][0] not in ['contribution', 'date', 'id']]))
 			}
 		)
 
-	return render_template('diff.html', ret=ret, dumps=dumps)
+		print ret[-1]['changes']
+
+	return render_template('diff.html', ret=ret, before=before, after=after)
 	# return json.dumps(ret, default=date_handler)

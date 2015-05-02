@@ -9,16 +9,31 @@
         /*max-width: 500px;*/
         /*padding-top: 100px;*/
       }
+      .highlight {
+        background-color: yellow;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <p>Loop through the list:</p>
-      <ul>
-        {% for n in ret %}
-        <li><pre>{{dumps(n, indent=4)}}</pre></li>
-        {% endfor %}
-      </ul>
+      <p>Difference between {{before}} and {{after}}</p>
+
+      <table>
+      {% for row in ret %}
+        <tr>
+          {% for k,v in row.before.iteritems() %}
+            <td {% if k in row.changes %} class="highlight"{% endif%}>{{ v }}</td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          {% for k,v in row.after.iteritems() %}
+            <td {% if k in row.changes %} class="highlight"{% endif%}>{{ v }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      </table>
+
     </div>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>

@@ -20,9 +20,15 @@ http://goo.gl/qjbWDO
 createdb campaigncon
 ```
 
-3. Seed the database
+3. Seed the database and ingest some new data
 ```
 python main.py reset
+python main.py ingest
+```
+
+4. Navigate to the website
+```
+open http://localhost:5000/?before=04-05-2015&after=05-01-2015
 ```
 
 # Download New Data
