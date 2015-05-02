@@ -112,6 +112,7 @@ var options = {
         }
     },
     smoothCurves: {dynamic:false, type: "continuous"},
+    navigation: true,
     stabilize: false,
     physics: {barnesHut: {gravitationalConstant: -2500, springConstant: 0.002, springLength: 600, centralGravity: 0}},
     hideEdgesOnDrag: true
@@ -154,6 +155,7 @@ function redrawAll(gephiJSON) {
     network.zoomExtent(); // zoom to fit
 }
 function onClick(selectedItems) {
+    network.storePositions();
     var selectedNode = selectedItems.nodes;
     var selectedEdges = selectedItems.edges;
     var nodeId;
