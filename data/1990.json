@@ -1,0 +1,584 @@
+{  
+   "edges":[  
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00237891",
+         "id":"4",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"D",
+            "type":"15",
+            "fec_trans_id":"0174493"
+         },
+         "color":"rgb(0,0,255)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00150623",
+         "id":"9",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"2000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0407746"
+         },
+         "color":"rgb(255,0,0)",
+         "size":2000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00115667",
+         "id":"16",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0609849"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00082214",
+         "id":"3",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0306849"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00235499",
+         "id":"14",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"C00091009",
+            "real_code":"Z5100",
+            "recipientparty":"R",
+            "type":"15E",
+            "fec_trans_id":"0645530"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00149971",
+         "id":"8",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"D",
+            "type":"15",
+            "fec_trans_id":"0415870"
+         },
+         "color":"rgb(0,0,255)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00167585",
+         "id":"10",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"2000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"D",
+            "type":"15",
+            "fec_trans_id":"0470622"
+         },
+         "color":"rgb(0,0,255)",
+         "size":2000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00242768",
+         "id":"11",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"2000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0478603"
+         },
+         "color":"rgb(255,0,0)",
+         "size":2000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00027466",
+         "id":"12",
+         "attributes":{  
+            "amount":"4000.0",
+            "count":"4",
+            "Weight":"4000.0",
+            "other_id":"C00115667",
+            "real_code":"Z9500",
+            "recipientparty":"R",
+            "type":"24I",
+            "fec_trans_id":"0480747, 0480748, 0480750, 0480749"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00170712",
+         "id":"15",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"C00091009",
+            "real_code":"Z5100",
+            "recipientparty":"R",
+            "type":"15E",
+            "fec_trans_id":"0620786"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00217117",
+         "id":"17",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"2000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0691375"
+         },
+         "color":"rgb(255,0,0)",
+         "size":2000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00091892",
+         "id":"2",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0079640"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00087346",
+         "id":"5",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0205642"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00236216",
+         "id":"6",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"na",
+            "real_code":"F4100",
+            "recipientparty":"R",
+            "type":"15",
+            "fec_trans_id":"0392771"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00193342",
+         "id":"7",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"C00091009",
+            "real_code":"Z5100",
+            "recipientparty":"R",
+            "type":"15E",
+            "fec_trans_id":"0384708"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00202648",
+         "id":"13",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"1000.0",
+            "other_id":"C00091009",
+            "real_code":"Z5100",
+            "recipientparty":"R",
+            "type":"15E",
+            "fec_trans_id":"0586029"
+         },
+         "color":"rgb(255,0,0)",
+         "size":1000.0
+      },
+      {  
+         "source":"a00003927711_BONE, WILLIAM",
+         "target":"C00091009",
+         "id":"1",
+         "attributes":{  
+            "amount":"1000.0",
+            "count":"1",
+            "Weight":"4000.0",
+            "other_id":"C00091892",
+            "real_code":"Z9500",
+            "recipientparty":"R",
+            "type":"24I",
+            "fec_trans_id":"0110263"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4000.0
+      }
+   ],
+   "nodes":[  
+      {  
+         "label":"Jesse Helms (R)",
+         "x":428.0019226074219,
+         "y":-475.00164794921875,
+         "id":"C00217117",
+         "attributes":{  
+            "amount":"2000.0",
+            "electioncycle":"1990",
+            "recipientstate":"NC",
+            "recip_code":"RW",
+            "total count":"2",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":34.12286376953125
+      },
+      {  
+         "label":"John T Doolittle (R)",
+         "x":-86.7755126953125,
+         "y":678.0322875976562,
+         "id":"C00242768",
+         "attributes":{  
+            "amount":"2000.0",
+            "electioncycle":"1990",
+            "recipientstate":"CA",
+            "recip_code":"RW",
+            "total count":"2",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":34.12286376953125
+      },
+      {  
+         "label":"Dan Coats (R)",
+         "x":-648.6302490234375,
+         "y":-36.7244758605957,
+         "id":"C00235499",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"IN",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Al McCandless (R)",
+         "x":-438.5841369628906,
+         "y":382.03765869140625,
+         "id":"C00150623",
+         "attributes":{  
+            "amount":"2000.0",
+            "electioncycle":"1990",
+            "recipientstate":"CA",
+            "recip_code":"RW",
+            "total count":"2",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":34.12286376953125
+      },
+      {  
+         "label":"Richard H Lehman (D)",
+         "x":-472.78759765625,
+         "y":-213.50555419921875,
+         "id":"C00149971",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"CA",
+            "recip_code":"DW",
+            "total count":"1",
+            "recipientparty":"D"
+         },
+         "color":"rgb(0,0,255)",
+         "size":4.0
+      },
+      {  
+         "label":"Mark O Hatfield (R)",
+         "x":275.2621154785156,
+         "y":665.0914916992188,
+         "id":"C00087346",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"OR",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"BONE, WILLIAM",
+         "x":5.845129013061523,
+         "y":29.470672607421875,
+         "id":"a00003927711_BONE, WILLIAM",
+         "attributes":{  
+            "amount":"27000.0",
+            "zip":"92260",
+            "electioncycle":"1990",
+            "total count":"27",
+            "employer":"SUNRISE COMPANY",
+            "contributorstate":"CA",
+            "gender":"M"
+         },
+         "color":"rgb(0,255,0)",
+         "size":100.0
+      },
+      {  
+         "label":"Hank Brown (R)",
+         "x":633.9677124023438,
+         "y":126.86627960205078,
+         "id":"C00236216",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"CO",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Mitch McConnell (R)",
+         "x":599.3726806640625,
+         "y":-257.5750732421875,
+         "id":"C00193342",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"KY",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Larry Craig (R)",
+         "x":484.8000793457031,
+         "y":-39.94074630737305,
+         "id":"C00027466",
+         "attributes":{  
+            "amount":"4000.0",
+            "electioncycle":"1990",
+            "recipientstate":"ID",
+            "recip_code":"RW",
+            "total count":"4",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":52.956966400146484
+      },
+      {  
+         "label":"Pete V Domenici (R)",
+         "x":132.8894805908203,
+         "y":453.61431884765625,
+         "id":"C00202648",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"NM",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Thad Cochran (R)",
+         "x":-325.4687805175781,
+         "y":596.1937255859375,
+         "id":"C00091892",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"MS",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Larry Pressler (R)",
+         "x":-415.9571838378906,
+         "y":-449.05517578125,
+         "id":"C00082214",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"SD",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Larry Craig (R)",
+         "x":533.5482788085938,
+         "y":404.8550720214844,
+         "id":"C00115667",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"ID",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      },
+      {  
+         "label":"Maxine Waters (D)",
+         "x":-600.2817993164062,
+         "y":200.64248657226562,
+         "id":"C00167585",
+         "attributes":{  
+            "amount":"2000.0",
+            "electioncycle":"1990",
+            "recipientstate":"CA",
+            "recip_code":"DW",
+            "total count":"2",
+            "recipientparty":"D"
+         },
+         "color":"rgb(0,0,255)",
+         "size":34.12286376953125
+      },
+      {  
+         "label":"Thad Cochran (R)",
+         "x":155.17555236816406,
+         "y":-417.1121826171875,
+         "id":"C00091009",
+         "attributes":{  
+            "amount":"4000.0",
+            "electioncycle":"1990",
+            "recipientstate":"MS",
+            "recip_code":"RW",
+            "total count":"4",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":52.956966400146484
+      },
+      {  
+         "label":"Pete Geren (D)",
+         "x":-167.5684814453125,
+         "y":-581.3114624023438,
+         "id":"C00237891",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"TX",
+            "recip_code":"DW",
+            "total count":"1",
+            "recipientparty":"D"
+         },
+         "color":"rgb(0,0,255)",
+         "size":4.0
+      },
+      {  
+         "label":"Phil Gramm (R)",
+         "x":20.224958419799805,
+         "y":-639.8187866210938,
+         "id":"C00170712",
+         "attributes":{  
+            "amount":"1000.0",
+            "electioncycle":"1990",
+            "recipientstate":"TX",
+            "recip_code":"RW",
+            "total count":"1",
+            "recipientparty":"R"
+         },
+         "color":"rgb(255,0,0)",
+         "size":4.0
+      }
+   ]
+}

@@ -1,5 +1,4 @@
 # Custom
-data/
 .db
 # Numerous always-ignore extensions
 *.diff

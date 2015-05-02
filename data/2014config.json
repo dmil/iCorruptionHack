@@ -1,0 +1,53 @@
+{
+  "type": "network",
+  "version": "1.0",
+  "data": "data/2014data.json",
+  "logo": {
+    "text": "campaignCon",
+    "file": "img/campaignCon-logo-small.png",
+    "link": ""
+  },
+  "text": {
+    "title": "Network of Corruption",
+    "more": "This network shows the individuals and PACs that contributed over $25,000 in total to winning candidates in the 2014 election cycle.",
+    "intro": "The 2014 Congressional Election  Major Contributors"
+  },
+  "legend": {
+    "edgeLabel": "Contributions",
+    "colorLabel": "Party",
+    "nodeLabel": "Candidate/Contributor"
+  },
+  "features": {
+    "search": true,
+    "groupSelectorAttribute": false,
+    "hoverBehavior": "dim"
+  },
+  "informationPanel": {
+    "imageAttribute": false,
+    "groupByEdgeDirection": false
+  },
+  "sigma": {
+    "graphProperties": {
+      "minEdgeSize": 0.2,
+      "maxNodeSize": 7,
+      "maxEdgeSize": 0.5,
+      "minNodeSize": 1
+    },
+    "drawingProperties": {
+      "labelThreshold": 10,
+      "hoverFontStyle": "bold",
+      "defaultEdgeType": "curve",
+      "defaultLabelColor": "#000",
+      "defaultLabelHoverColor": "#fff",
+      "defaultLabelSize": 14,
+      "activeFontStyle": "bold",
+      "fontStyle": "bold",
+      "defaultHoverLabelBGColor": "#002147",
+      "defaultLabelBGColor": "#ddd"
+    },
+    "mouseProperties": {
+      "minRatio": 0.75,
+      "maxRatio": 20
+    }
+  }
+}
