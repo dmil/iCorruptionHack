@@ -9,9 +9,13 @@
         /*max-width: 500px;*/
         /*padding-top: 100px;*/
       }
-      .highlight {
+      .edited {
         background-color: yellow;
       }
+      .deleted {
+        background-color: red;
+      }
+
     </style>
   </head>
   <body>
@@ -29,13 +33,19 @@
         </thead>
         <tr>
           {% for k,v in row.before.iteritems() %}
-            <td {% if k in row.changes %} class="highlight"{% endif%}>{{ v }}</td>
+            <td {% if k in row.changes %} class="edited"{% endif%}>{{ v }}</td>
           {% endfor %}
         </tr>
         <tr>
-          {% for k,v in row.after.iteritems() %}
-            <td {% if k in row.changes %} class="highlight"{% endif%}>{{ v }}</td>
-          {% endfor %}
+          {% if row.after != None %}
+            {% for k,v in row.after.iteritems() %}
+              <td {% if k in row.changes %}class="edited"{% endif%}>{{ v }}</td>
+            {% endfor %}
+          {% else %}
+            {% for k,v in ret[0].before.iteritems() %}
+              <td class="deleted">-</td>
+            {% endfor %}
+          {% endif %}
         </tr>
       </table>
       {% endfor %}
