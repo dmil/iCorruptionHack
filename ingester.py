@@ -92,21 +92,27 @@ def seed_from(filepath):
 
     print "Ingesting %s" % filepath
     rows = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath,
-                                sha1=sha1OfFile(filepath))
 
-    for idx in range(0, len(rows), 500):
-        print "Inserting row %d of %d from %s" % (idx, len(rows), filepath)
-        rows_subset = rows[idx:idx+500]
-        Contribution.insert_many(rows_subset).execute()
+    with db.transaction():
+        myfile, _ = File.get_or_create(
+                    name = os.path.basename(filepath),
+                    years=next(re.finditer(r'\d{4}_\d{4}', os.path.basename(filepath))),
+                    sha1 = sha1OfFile(filepath),
+                    updated = dateparse(os.path.dirname(filepath).split("/")[-1].replace("downloaded_", "").replace("_", "-")).date(),
+                    ingested = False
+                    )
+
+        for idx in range(0, len(rows), 500):
+            print "Inserting row %d of %d from %s" % (idx, len(rows), filepath)
+            rows_subset = rows[idx:idx+500]
+            Contribution.insert_many(rows_subset).execute()
+
+        myfile.update(ingested=True)
 
 def ingest(filepath):
     '''Ingest file into database'''
     print "Ingesting %s" % filepath
     rows = parse_fec_file(filepath)
-    myfile = File.get_or_create(name=filepath,
-                                sha1=sha1OfFile(filepath))
-
     # check history table to see if this file is done
 
     with db.transaction():
@@ -151,6 +157,14 @@ def ingest(filepath):
                     contribution_in_db.save()
 
                     ContributionHistory.create(contribution=contribution_in_db.id, date=row['date'], cycle=row['cycle'], sub_id=row['sub_id'])
+
+        myfile, _ = File.get_or_create(
+                name = os.path.basename(filepath),
+                years=next(re.finditer(r'\d{4}_\d{4}', os.path.basename(filepath))),
+                sha1 = sha1OfFile(filepath),
+                updated = dateparse(os.path.dirname(filepath).split("/")[-1].replace("downloaded_", "").replace("_", "-")).date(),
+                ingested = True
+                )
 
 # if __name__ == '__main__':
 #     filepaths = [
