@@ -1,0 +1,126 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+  </head>
+  <body>
+  <p> 
+  <h1> Click <a href='http://goo.gl/1AmW7A'>here</a> to get updates on our project! </h1>
+  <a href="https://github.com/dmil/iCorruptionHack"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+  Difference between FEC filings on Feb 17 2014 and March 22 2015.
+
+  Of the 2,142,194 records collected in March 2015 we were able to find 700 differences 
+  </p>
+    <div class="container" style="width:100%;">
+      <ol id="thing">
+      </ol>
+    </div>
+
+
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+
+
+      <!-- build:js scripts/main.js -->
+      <script src="bower_components/jquery/jquery.js"></script>
+      <script src="bower_components/dynatable/jquery.dynatable.js"></script>
+      <script src="scripts/main.js"></script>
+      <script src="scripts/hello.js"></script>
+      <!-- endbuild -->
+
+      <!-- build:js scripts/vendor/bootstrap.js -->
+      <script src="bower_components/bootstrap/js/affix.js"></script>
+      <script src="bower_components/bootstrap/js/alert.js"></script>
+      <script src="bower_components/bootstrap/js/dropdown.js"></script>
+      <script src="bower_components/bootstrap/js/tooltip.js"></script>
+      <script src="bower_components/bootstrap/js/modal.js"></script>
+      <script src="bower_components/bootstrap/js/transition.js"></script>
+      <script src="bower_components/bootstrap/js/button.js"></script>
+      <script src="bower_components/bootstrap/js/popover.js"></script>
+      <script src="bower_components/bootstrap/js/carousel.js"></script>
+      <script src="bower_components/bootstrap/js/scrollspy.js"></script>
+      <script src="bower_components/bootstrap/js/collapse.js"></script>
+      <script src="bower_components/bootstrap/js/tab.js"></script>
+      <!-- endbuild -->
+
+      <script>
+
+        // var columns = ['comittee_id', 'ammendment_id', 'report_type', 'transaction_pgi', 'image_num', 'transaction_tp', 'entity_tp', 'name', 'new', 'city']
+
+        $.getJSON("diff.json", function(data) {
+          for (i in data) {
+
+            var columns = [];
+            var values = [];
+
+            for (j in data[0]) {
+              var obj = data[i][j];
+              var key = Object.keys(obj)[0];
+              columns.push(key);
+              values.push(obj[key]);
+            }
+
+            var header = "<thead><tr>";
+            for (i in columns) {
+              header += "<th>"+ columns[i] + "</th>";
+            }
+            header += "</tr></thead>";
+
+            var rowold = "<tr>";
+            var rownew = "<tr>";
+            for (i in values) {
+              if (values[i].changed == true) {
+                rowold += "<td bgcolor='yellow'>" + values[i].old + "</td>"
+                rownew += "<td bgcolor='yellow'>" + values[i].new + "</td>"
+              }
+              else {
+                rowold += "<td>" + values[i].old + "</td>"
+                rownew += "<td>" + values[i].new + "</td>"
+              }
+            }
+            rowold += "</tr>";
+            rownew += "</tr>";
+
+            var elem = "<table class='table'>" +
+              header +
+              "<tbody>" +
+                rowold +
+                rownew +
+              "</tbody>" +
+            "</table>";
+
+            $("#thing").append("<li>" + elem + "</li>");
+
+            console.log(columns);
+
+            // $('#thing li:last-child').dynatable({dataset: {records: data[i]}});
+            // data[i]
+          }
+        });
+      </script>
+</body>
+</html>
