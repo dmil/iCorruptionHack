@@ -5,6 +5,7 @@ Tracing the data overtime can surface possible data issues and keep track of how
 
 Historically there have been [reports of inconsistencies](http://ethics.harvard.edu/blog/researchers-find-inconsistencies-fec-data) between the FEC bulk data and the FEC individual records. In transferring from one database to another, or going from individual records to bulk data releases, data can be lost or corrupted. Our project helps ensure that data coming from the government is sound and can be used for accurate reporting. 
 
+*This project is still in development! [Leave us your contact info](http://goo.gl/qjbWDO) for updates.
 
 # Stay in Touch!
 Leave us your name and email address. No spam, only important updates, we promise!
